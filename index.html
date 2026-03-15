@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home A Variant 3 - Symmetric Nav</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at 10% 10%, #f7fbff 0%, #edf3fb 45%, #e9eef5 100%);
+    color: #1a1a1a;
+    padding: 28px 14px 56px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .sub {
+    text-align: center;
+    color: #667085;
+    font-size: 14px;
+    margin-bottom: 26px;
+  }
+
+  .wrap {
+    max-width: 540px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e7edf5;
+    border-radius: 20px;
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.10);
+    padding: 18px;
+  }
+
+  .meta {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .phone {
+    width: 320px;
+    height: 680px;
+    margin: 0 auto;
+    border-radius: 42px;
+    border: 9px solid #141414;
+    overflow: hidden;
+    background: #f5f5f7;
+    position: relative;
+    box-shadow: 0 28px 56px rgba(0,0,0,0.26);
+  }
+
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 108px;
+    height: 26px;
+    border-radius: 0 0 16px 16px;
+    background: #141414;
+    z-index: 100;
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    background: #f5f5f7;
+    position: relative;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  .a-header {
+    background: linear-gradient(145deg, #007aff 0%, #5ac8fa 100%);
+    padding: 44px 20px 28px;
+    color: #fff;
+  }
+
+  .a-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .a-header-title { font-size: 24px; font-weight: 800; }
+  .a-header-sub { font-size: 12px; opacity: 0.82; margin-top: 2px; }
+
+  .a-week {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 8px 10px;
+  }
+
+  .a-week-arrow { font-size: 16px; color: rgba(255,255,255,0.9); font-weight: 700; padding: 0 2px; }
+  .a-week-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 7px;
+    border-radius: 12px;
+    min-width: 32px;
+  }
+  .a-week-day.selected { background: rgba(255,255,255,0.95); }
+  .a-week-day.today .a-wd-num { color: #ffd700; font-weight: 800; }
+  .a-wd-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.72); text-transform: uppercase; margin-bottom: 3px; }
+  .a-week-day.selected .a-wd-label { color: #007aff; }
+  .a-wd-num { font-size: 14px; font-weight: 700; color: #fff; }
+  .a-week-day.selected .a-wd-num { color: #007aff; }
+
+  .a-body {
+    padding: 0 14px 98px;
+    margin-top: -1px;
+  }
+
+  .a-ring-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 20px;
+    margin-top: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .a-stat { text-align: center; flex: 1; }
+  .a-stat-val { font-size: 20px; font-weight: 800; color: #1a1a1a; }
+  .a-stat-lbl { font-size: 11px; color: #8e8e93; margin-top: 2px; }
+  .a-stat-lbl.burned { color: #ff6b35; }
+
+  .a-ring-wrap {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .a-ring-svg { transform: rotate(-90deg); }
+  .a-ring-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .a-ring-kcal { font-size: 22px; font-weight: 800; color: #1a1a1a; }
+  .a-ring-sub { font-size: 10px; color: #8e8e93; margin-top: 1px; }
+
+  .a-macros { display: flex; gap: 8px; margin-top: 12px; }
+
+  .a-macro-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+    min-height: 96px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .a-macro-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .a-macro-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    color: #8e8e93;
+    text-align: center;
+    line-height: 1.25;
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .a-macro-val {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
+  }
+
+  .a-ring-unit {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b7280;
+    margin-top: 1px;
+  }
+
+  .a-macro-bar-bg {
+    height: 5px;
+    background: #f0f0f5;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .a-macro-bar-fill { height: 5px; border-radius: 3px; }
+
+  .a-list-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 16px;
+    margin-top: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+
+  .a-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .a-list-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .a-list-count { font-size: 12px; color: #8e8e93; }
+
+  .a-entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f5f5f7;
+  }
+  .a-entry:last-child { border-bottom: none; }
+
+  .a-entry-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .a-entry-info { flex: 1; }
+  .a-entry-name { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .a-entry-meta { font-size: 11px; color: #8e8e93; margin-top: 1px; }
+  .a-entry-kcal { font-size: 13px; font-weight: 700; color: #3a3a3c; }
+
+  .a-burned-section {
+    margin-top: 12px;
+    background: #fff4ef;
+    border-radius: 20px;
+    padding: 14px 16px;
+  }
+
+  .a-burned-title { font-size: 14px; font-weight: 700; color: #ff6b35; margin-bottom: 8px; }
+
+  .a-burned-entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+  }
+
+  .a-burned-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: rgba(255,107,53,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .a-burned-name { flex: 1; font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .a-burned-kcal { font-size: 13px; font-weight: 700; color: #ff6b35; }
+
+  .bottom-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 76px;
+    padding: 10px 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 30;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid #e9edf4;
+    box-shadow: 0 -10px 24px rgba(8,58,110,0.09);
+  }
+
+  .tab {
+    width: 52px;
+    height: 42px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #a6afbc;
+  }
+
+  .tab.active {
+    color: #0b6bcb;
+    background: linear-gradient(145deg, #ebf5ff, #f3f9ff);
+  }
+
+  .center-tab {
+    width: 54px;
+    height: 54px;
+    border-radius: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -16px;
+    color: #fff;
+    background: linear-gradient(145deg, #007aff, #5ac8fa);
+    box-shadow: 0 12px 24px rgba(0,122,255,0.42);
+  }
+
+  .ico {
+    width: 21px;
+    height: 21px;
+    stroke-width: 2.1;
+    fill: none;
+    stroke: currentColor;
+  }
+
+  .legend {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #475467;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 520px) {
+    .phone { width: 300px; height: 650px; }
+  }
+</style>
+</head>
+<body>
+  <h1>Einzel-Mockup: Variante 3 + symmetrische Nav</h1>
+  <p class="sub">Home A Basis, ohne Produkte-Button oben rechts, mit 5 Icons unten und Plus in der Mitte</p>
+
+  <div class="wrap">
+    <p class="meta">Bottom Navigation: Home | Produkte | Hinzufügen | Statistiken | Settings</p>
+
+    <div class="phone">
+      <div class="screen">
+        <div class="a-header">
+          <div class="a-header-top">
+            <div>
+              <div class="a-header-title">Nutri AI Tracker</div>
+              <div class="a-header-sub">Dein Ernährungs-Begleiter</div>
+            </div>
+            <div style="width:38px;height:38px;"></div>
+          </div>
+          <div class="a-week">
+            <div class="a-week-arrow">&lsaquo;</div>
+            <div class="a-week-day"><div class="a-wd-label">MO</div><div class="a-wd-num">9</div></div>
+            <div class="a-week-day"><div class="a-wd-label">DI</div><div class="a-wd-num">10</div></div>
+            <div class="a-week-day"><div class="a-wd-label">MI</div><div class="a-wd-num">11</div></div>
+            <div class="a-week-day today"><div class="a-wd-label">DO</div><div class="a-wd-num">12</div></div>
+            <div class="a-week-day selected"><div class="a-wd-label">FR</div><div class="a-wd-num">13</div></div>
+            <div class="a-week-day"><div class="a-wd-label">SA</div><div class="a-wd-num">14</div></div>
+            <div class="a-week-day"><div class="a-wd-label">SO</div><div class="a-wd-num">15</div></div>
+            <div class="a-week-arrow">&rsaquo;</div>
+          </div>
+        </div>
+
+        <div class="a-body">
+          <div class="a-ring-card">
+            <div class="a-stat"><div class="a-stat-val">1 840</div><div class="a-stat-lbl">Gegessen</div></div>
+            <div class="a-ring-wrap">
+              <svg class="a-ring-svg" width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E8E8ED" stroke-width="10"></circle>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#007AFF" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="75" stroke-linecap="round"></circle>
+              </svg>
+              <div class="a-ring-inner"><div class="a-ring-kcal">360</div><div class="a-ring-unit">kcal</div><div class="a-ring-sub">übrig</div></div>
+            </div>
+            <div class="a-stat"><div class="a-stat-val" style="color:#ff6b35">320</div><div class="a-stat-lbl burned">Verbrannt</div></div>
+          </div>
+
+          <div class="a-macros">
+            <div class="a-macro-card"><div class="a-macro-top"><span class="a-macro-lbl">Kohlenhydrate</span><span class="a-macro-val">218/250g</span></div><div class="a-macro-bar-bg"><div class="a-macro-bar-fill" style="width:87%;background:#ffd93d"></div></div></div>
+            <div class="a-macro-card"><div class="a-macro-top"><span class="a-macro-lbl">Proteine</span><span class="a-macro-val">96/130g</span></div><div class="a-macro-bar-bg"><div class="a-macro-bar-fill" style="width:74%;background:#4ecdc4"></div></div></div>
+            <div class="a-macro-card"><div class="a-macro-top"><span class="a-macro-lbl">Fett</span><span class="a-macro-val">52/75g</span></div><div class="a-macro-bar-bg"><div class="a-macro-bar-fill" style="width:69%;background:#ff6b6b"></div></div></div>
+          </div>
+
+          <div class="a-list-card">
+            <div class="a-list-header"><span class="a-list-title">Tagesübersicht</span><span class="a-list-count">3 Einträge</span></div>
+            <div class="a-entry"><div class="a-entry-dot" style="background:#fff8e1">🥗</div><div class="a-entry-info"><div class="a-entry-name">Großer Salat</div><div class="a-entry-meta">K 18g · P 12g · F 8g</div></div><div class="a-entry-kcal">320 kcal</div></div>
+            <div class="a-entry"><div class="a-entry-dot" style="background:#e8f5e9">🍳</div><div class="a-entry-info"><div class="a-entry-name">Rührei mit Toast</div><div class="a-entry-meta">K 42g · P 28g · F 18g</div></div><div class="a-entry-kcal">480 kcal</div></div>
+            <div class="a-entry"><div class="a-entry-dot" style="background:#e3f2fd">🍗</div><div class="a-entry-info"><div class="a-entry-name">Hähnchen + Reis</div><div class="a-entry-meta">K 58g · P 44g · F 12g</div></div><div class="a-entry-kcal">640 kcal</div></div>
+          </div>
+
+          <div class="a-burned-section">
+            <div class="a-burned-title">Aktivitäten</div>
+            <div class="a-burned-entry"><div class="a-burned-dot">🏃</div><div class="a-burned-name">Joggen 30 Min.</div><div class="a-burned-kcal">-320 kcal</div></div>
+          </div>
+        </div>
+
+        <nav class="bottom-nav">
+          <div class="tab active" title="Home">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V21h13V9.5"></path></svg>
+          </div>
+          <div class="tab" title="Produkte">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M7 6h10"></path><rect x="6" y="6" width="12" height="12" rx="2"></rect><path d="M9 10h6M9 13h6"></path></svg>
+          </div>
+          <div class="center-tab" title="Hinzufügen">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+          </div>
+          <div class="tab" title="Statistiken">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M4 20h16"></path><path d="M6 16l4-4 3 2 5-6"></path><circle cx="6" cy="16" r="1.2"></circle><circle cx="10" cy="12" r="1.2"></circle><circle cx="13" cy="14" r="1.2"></circle><circle cx="18" cy="8" r="1.2"></circle></svg>
+          </div>
+          <div class="tab" title="Settings">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.05.05a2 2 0 1 1-2.83 2.83l-.05-.05A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .96 1.7 1.7 0 0 1-3.2 0 1.7 1.7 0 0 0-1-.96 1.7 1.7 0 0 0-1.87.34l-.05.05a2 2 0 1 1-2.83-2.83l.05-.05A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.96-1 1.7 1.7 0 0 1 0-3.2 1.7 1.7 0 0 0 .96-1 1.7 1.7 0 0 0-.34-1.87l-.05-.05a2 2 0 1 1 2.83-2.83l.05.05A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.96 1.7 1.7 0 0 1 3.2 0 1.7 1.7 0 0 0 1 .96 1.7 1.7 0 0 0 1.87-.34l.05-.05a2 2 0 1 1 2.83 2.83l-.05.05A1.7 1.7 0 0 0 19.4 9c.4.16.74.48.96.88a1.7 1.7 0 0 1 0 2.24c-.22.4-.56.72-.96.88A1.7 1.7 0 0 0 19.4 15z"></path></svg>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="legend">Symmetrische 5er-Nav mit Plus exakt in der Mitte und Settings ganz rechts.</div>
+  </div>
+</body>
+</html>
